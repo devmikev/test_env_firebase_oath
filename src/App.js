@@ -16,29 +16,14 @@ function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [accessToken, setAccessToken] = useState(null);
 
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      setIsSignedIn(!!user);
-    });
-
-    console.log("firebase mounted: ", firebase.auth());
-  }, []);
-
-  const uiConfig = {
-    signInFlow: "popup",
-    signInOptions: [
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    ],
-    callbacks: {
-      signInSuccess: () => false,
-    },
-  };
+  auth.onAuthStateChanged((user) => {
+    setIsSignedIn(!!user);
+  });
 
   async function sendMail(e) {
     e.preventDefault();
     if (!formData.jwt) {
-      formData.jwt = await firebase.auth().currentUser.refreshToken;
+      formData.jwt = await auth.currentUser.refreshToken;
     }
 
     const url = "//localhost:1234/test";
@@ -47,7 +32,11 @@ function App() {
         "Content-Type": "application/json",
       },
       method: "POST",
-      body: JSON.stringify({ ...formData, accessToken }),
+      body: JSON.stringify({
+        ...formData,
+        accessToken,
+        from: auth.currentUser.email,
+      }),
     });
     const json = await res.json();
     console.log(json);
@@ -69,12 +58,13 @@ function App() {
       {isSignedIn ? (
         <div>
           <p>Signed in!</p>
-          <button onClick={() => firebase.auth().signOut()}>Sign out!</button>
-          <h1>Welcome {firebase.auth().currentUser.displayName}</h1>
+          <button onClick={() => auth.signOut()}>Sign out!</button>
+          <h1>Welcome {auth.currentUser.displayName}</h1>
           <form action="" onSubmit={sendMail}>
             <input type="text" name="to" onChange={changeHandler} />
             <input type="text" name="subject" onChange={changeHandler} />
-            <button type="submit">Get Token</button>
+            <input type="text" name="message" onChange={changeHandler} />
+            <button type="submit">Send Email</button>
           </form>
         </div>
       ) : (
