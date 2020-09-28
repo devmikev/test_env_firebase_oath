@@ -36,12 +36,6 @@ function Auth() {
           <button onClick={() => auth.signOut()}>Sign out!</button>
           <h1>Welcome {auth.currentUser.displayName}</h1>
           <Email accessToken={accessToken} auth={auth} />
-          {/* <form action="" onSubmit={sendMail}>
-            <input type="text" name="to" onChange={changeHandler} />
-            <input type="text" name="subject" onChange={changeHandler} />
-            <input type="text" name="message" onChange={changeHandler} />
-            <button type="submit">Send Email</button>
-          </form> */}
         </div>
       ) : (
         <button onClick={signIn}>Sign In</button>
