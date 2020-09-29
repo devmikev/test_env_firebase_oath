@@ -1,6 +1,8 @@
 import React from "react";
 // import auth from "./Auth";
 
+// import firebase from "../components/firebase";
+
 function Email(props) {
   console.log(props);
   async function sendMail(e) {

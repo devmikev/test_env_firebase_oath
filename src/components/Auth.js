@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-import firebase from "firebase";
-import Email from "./Email";
+// import firebase from "firebase";
+import firebase from "../components/firebase";
+import ContactForm from "./ContactForm";
 
-firebase.initializeApp({
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-});
+import Email from "./Email";
+// import ContactForm from "./ContactForm";
+// firebase.initializeApp({
+//   apiKey: process.env.REACT_APP_API_KEY,
+//   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+// });
 
 const provider = new firebase.auth.GoogleAuthProvider();
 provider.addScope("https://mail.google.com/");
@@ -36,6 +39,7 @@ function Auth() {
           <button onClick={() => auth.signOut()}>Sign out!</button>
           <h1>Welcome {auth.currentUser.displayName}</h1>
           <Email accessToken={accessToken} auth={auth} />
+          <ContactForm />
         </div>
       ) : (
         <button onClick={signIn}>Sign In</button>
